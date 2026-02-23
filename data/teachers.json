@@ -1,0 +1,134 @@
+[
+  {
+    "id": "e6f4a8b1-1234-4a5b-9c1d-8e9f0a1b2c3d",
+    "firstName": "Laticia",
+    "lastName": "Landen",
+    "email": "teacher1@school.edu",
+    "phone": "555-591",
+    "roomNumber": "3a",
+    "profilePicture": "https://api.dicebear.com/7.x/initials/svg?seed=Laticia%20Landen",
+    "subjects": [
+      "Computer science",
+      "Physics"
+    ]
+  },
+  {
+    "id": "f7a5b9c2-2345-5b6c-ad2e-9f0a1b2c3d4e",
+    "firstName": "Maryjane",
+    "lastName": "Marcum",
+    "email": "teacher2@school.edu",
+    "phone": "555-599",
+    "roomNumber": "1c",
+    "profilePicture": "https://api.dicebear.com/7.x/initials/svg?seed=Maryjane%20Marcum",
+    "subjects": [
+      "Mathematics"
+    ]
+  },
+  {
+    "id": "0b1c2d3e-3456-6c7d-be3f-0a1b2c3d4e5f",
+    "firstName": "Josephina",
+    "lastName": "Janecek",
+    "email": "teach3@school.edu",
+    "phone": "555-1045",
+    "roomNumber": "1a",
+    "profilePicture": "https://api.dicebear.com/7.x/initials/svg?seed=Josephina%20Janecek",
+    "subjects": [
+      "History"
+    ]
+  },
+  {
+    "id": "1c2d3e4f-4567-7d8e-cf4a-1b2c3d4e5f6a",
+    "firstName": "Tamela",
+    "lastName": "Tomblin",
+    "email": "teach1@school.edu",
+    "phone": "555-442",
+    "roomNumber": "2d",
+    "profilePicture": "https://api.dicebear.com/7.x/initials/svg?seed=Tamela%20Tomblin",
+    "subjects": [
+      "geography",
+      "Computer science",
+      "Biology",
+      "Chemistry"
+    ]
+  },
+  {
+    "id": "2d3e4f5a-5678-8e9f-df5b-2c3d4e5f6a7b",
+    "firstName": "Bernardo",
+    "lastName": "Bains",
+    "email": "teach4@school.edu",
+    "phone": "555-813",
+    "roomNumber": "7a",
+    "profilePicture": "https://api.dicebear.com/7.x/initials/svg?seed=Bernardo%20Bains",
+    "subjects": [
+      "Mathematics",
+      "Physics"
+    ]
+  },
+  {
+    "id": "3e4f5a6b-6789-9f0a-ef6c-3d4e5f6a7b8c",
+    "firstName": "Cordelia",
+    "lastName": "Carpio",
+    "email": "teach5@school.edu",
+    "phone": "555-337",
+    "roomNumber": "12E",
+    "profilePicture": "https://api.dicebear.com/7.x/initials/svg?seed=Cordelia%20Carpio",
+    "subjects": [
+      "Computer Science",
+      "Maths"
+    ]
+  },
+  {
+    "id": "4f5a6b7c-7890-0a1b-f07d-4e5f6a7b8c9d",
+    "firstName": "Soon",
+    "lastName": "Shott",
+    "email": "teach6@school.edu",
+    "phone": "555-912",
+    "roomNumber": "11a",
+    "profilePicture": "https://api.dicebear.com/7.x/initials/svg?seed=Soon%20Shott",
+    "subjects": [
+      "English",
+      "Arabic"
+    ]
+  },
+  {
+    "id": "5a6b7c8d-8901-1b2c-018e-5f6a7b8c9d0e",
+    "firstName": "Martha",
+    "lastName": "Mcloughlin",
+    "email": "teach7@school.edu",
+    "phone": "555-335",
+    "roomNumber": "7G",
+    "profilePicture": "https://api.dicebear.com/7.x/initials/svg?seed=Martha%20Mcloughlin",
+    "subjects": [
+      "Mathematics",
+      "physics",
+      "chemistry",
+      "biology",
+      "history"
+    ]
+  },
+  {
+    "id": "6b7c8d9e-9012-2c3d-129f-6a7b8c9d0e1f",
+    "firstName": "Arlinda",
+    "lastName": "Arehart",
+    "email": "teach8@school.edu",
+    "phone": "555-1051",
+    "roomNumber": "8b",
+    "profilePicture": "https://api.dicebear.com/7.x/initials/svg?seed=Arlinda%20Arehart",
+    "subjects": [
+      "History"
+    ]
+  },
+  {
+    "id": "7c8d9e0f-0123-3d4e-23af-7b8c9d0e1f2a",
+    "firstName": "Bernardo",
+    "lastName": "Bains",
+    "email": "teach9@school.edu",
+    "phone": "555-1030",
+    "roomNumber": "4c",
+    "profilePicture": "https://api.dicebear.com/7.x/initials/svg?seed=Bernardo%20Bains",
+    "subjects": [
+      "Physics",
+      "Biology"
+    ]
+  }
+]

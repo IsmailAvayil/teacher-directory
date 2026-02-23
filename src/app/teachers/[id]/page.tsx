@@ -147,8 +147,8 @@ export default function TeacherProfilePage({
           )}
         </div>
 
-        <div className="px-8 pb-12 relative">
-          <div className="absolute -top-16 left-8">
+        <div className="px-8 py-6 relative">
+          <div className="flex justify-between items-center">
             <div className="w-32 h-32 bg-white rounded-3xl p-1.5 shadow-2xl">
               <div className="w-full h-full bg-slate-100 rounded-2xl overflow-hidden">
                 {teacher.profilePicture ? (

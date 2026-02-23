@@ -130,5 +130,17 @@
       "Physics",
       "Biology"
     ]
+  },
+  {
+    "id": "85a81b3b-9b90-4849-a8c5-bda0d6e2d896",
+    "firstName": "farhan",
+    "lastName": "k",
+    "email": "far@gamil.com",
+    "phone": "8767898765",
+    "roomNumber": "543",
+    "profilePicture": "https://api.dicebear.com/7.x/avataaars/svg?seed=far@gamil.com",
+    "subjects": [
+      "sjsjs"
+    ]
   }
 ]

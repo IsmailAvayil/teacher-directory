@@ -2,18 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import {
-  ArrowLeft,
-  Save,
-  Plus,
-  X,
-  User,
-  Mail,
-  Phone,
-  MapPin,
-  BookOpen,
-  Camera,
-} from "lucide-react";
+import { ArrowLeft, Plus, X } from "lucide-react";
 import { useState } from "react";
 import { createTeacher } from "../actions";
 
@@ -75,7 +64,6 @@ export default function AddTeacherPage() {
     setSubjects((prev) => prev.filter((_, i) => i !== index));
   };
 
-  // ✅ Live validation
   const isFormValid =
     form.firstName.trim() &&
     form.lastName.trim() &&
@@ -84,7 +72,6 @@ export default function AddTeacherPage() {
     form.roomNumber.trim() &&
     subjects.length > 0;
 
-  // ✅ Submit
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 

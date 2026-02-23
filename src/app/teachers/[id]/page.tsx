@@ -1,403 +1,570 @@
+// "use client";
+
+// import { useEffect, useState } from "react";
+// import { useParams, useRouter } from "next/navigation";
+
+// type Teacher = {
+//   id: string;
+//   firstName: string;
+//   lastName: string;
+//   email: string;
+//   phone: string;
+//   roomNumber: string;
+//   profilePicture?: string;
+//   subjects: string[];
+// };
+
+// export default function TeacherDetailPage() {
+//   const { id } = useParams();
+//   const router = useRouter();
+
+//   const [teacher, setTeacher] = useState<Teacher | null>(null);
+//   const [loading, setLoading] = useState(true);
+//   const [isEditing, setIsEditing] = useState(false);
+//   const [subjects, setSubjects] = useState<string[]>([]);
+//   const [newSubject, setNewSubject] = useState("");
+
+//   const [form, setForm] = useState({
+//     firstName: "",
+//     lastName: "",
+//     email: "",
+//     phone: "",
+//     roomNumber: "",
+//     profilePicture: "",
+//   });
+
+//   // Fetch teacher
+//   useEffect(() => {
+//     const fetchTeacher = async () => {
+//       try {
+//         const res = await fetch("/api/teachers");
+//         const data = await res.json();
+//         const t = data.find((teacher: Teacher) => teacher.id === id);
+
+//         if (t) {
+//           setTeacher(t);
+//           setSubjects(t.subjects);
+
+//           setForm({
+//             firstName: t.firstName,
+//             lastName: t.lastName,
+//             email: t.email,
+//             phone: t.phone,
+//             roomNumber: t.roomNumber,
+//             profilePicture: t.profilePicture || "",
+//           });
+//         }
+//       } catch (error) {
+//         console.error(error);
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
+
+//     fetchTeacher();
+//   }, [id]);
+
+//   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+//     const { name, value } = e.target;
+
+//     setForm((prev) => ({
+//       ...prev,
+//       [name]: value,
+//     }));
+//   };
+
+//   const handleAddSubject = () => {
+//     if (!newSubject.trim()) return;
+//     if (subjects.length >= 5) {
+//       alert("Teacher can have maximum 5 subjects");
+//       return;
+//     }
+
+//     setSubjects([...subjects, newSubject.trim()]);
+//     setNewSubject("");
+//   };
+
+//   const handleRemoveSubject = (index: number) => {
+//     const updated = subjects.filter((_, i) => i !== index);
+//     setSubjects(updated);
+//   };
+
+//   const handleSave = async () => {
+//     if (!teacher) return;
+
+//     const formData = new FormData();
+//     formData.append("firstName", form.firstName);
+//     formData.append("lastName", form.lastName);
+//     formData.append("email", form.email);
+//     formData.append("phone", form.phone);
+//     formData.append("roomNumber", form.roomNumber);
+//     formData.append("profilePicture", form.profilePicture);
+//     formData.append("subjects", subjects.join(","));
+
+//     await fetch(`/api/teachers/${teacher.id}`, {
+//       method: "PUT",
+//       body: formData,
+//     });
+
+//     setTeacher({
+//       ...teacher,
+//       ...form,
+//       subjects,
+//     });
+
+//     setIsEditing(false);
+//   };
+
+//   const handleCancel = () => {
+//     if (!teacher) return;
+
+//     setForm({
+//       firstName: teacher.firstName,
+//       lastName: teacher.lastName,
+//       email: teacher.email,
+//       phone: teacher.phone,
+//       roomNumber: teacher.roomNumber,
+//       profilePicture: teacher.profilePicture || "",
+//     });
+
+//     setSubjects(teacher.subjects);
+//     setIsEditing(false);
+//   };
+
+//   if (loading) return <p className="p-6">Loading...</p>;
+//   if (!teacher) return <p className="p-6">Teacher not found</p>;
+
+//   return (
+//     <div className="max-w-3xl mx-auto p-6">
+//       {!isEditing ? (
+//         <>
+//           <div className="bg-white shadow-xl rounded-3xl p-8 relative">
+//             {teacher.profilePicture && (
+//               <img
+//                 src={teacher.profilePicture}
+//                 alt={teacher.firstName}
+//                 className="w-32 h-32 rounded-2xl object-cover mb-6"
+//               />
+//             )}
+
+//             <h2 className="text-2xl font-bold mb-2">
+//               {teacher.firstName} {teacher.lastName}
+//             </h2>
+//             <p>Email: {teacher.email}</p>
+//             <p>Phone: {teacher.phone}</p>
+//             <p>Room: {teacher.roomNumber}</p>
+
+//             <div className="mt-4">
+//               <h4 className="font-semibold">Subjects:</h4>
+//               {teacher.subjects.map((sub, index) => (
+//                 <span
+//                   key={index}
+//                   className="inline-block bg-slate-200 px-3 py-1 rounded-full mr-2 mt-2 text-sm"
+//                 >
+//                   {sub}
+//                 </span>
+//               ))}
+//             </div>
+
+//             <button
+//               onClick={() => setIsEditing(true)}
+//               className="mt-6 bg-blue-600 text-white px-6 py-2 rounded-xl"
+//             >
+//               Edit
+//             </button>
+//           </div>
+//         </>
+//       ) : (
+//         <div className="bg-white shadow-xl rounded-3xl p-8">
+//           <h2 className="text-xl font-bold mb-6">Edit Teacher</h2>
+
+//           <input
+//             name="firstName"
+//             value={form.firstName}
+//             onChange={handleChange}
+//             placeholder="First Name"
+//             className="w-full border p-2 mb-4 rounded-lg"
+//           />
+
+//           <input
+//             name="lastName"
+//             value={form.lastName}
+//             onChange={handleChange}
+//             placeholder="Last Name"
+//             className="w-full border p-2 mb-4 rounded-lg"
+//           />
+
+//           <input
+//             name="email"
+//             value={form.email}
+//             onChange={handleChange}
+//             placeholder="Email"
+//             className="w-full border p-2 mb-4 rounded-lg"
+//           />
+
+//           <input
+//             name="phone"
+//             value={form.phone}
+//             onChange={handleChange}
+//             placeholder="Phone"
+//             className="w-full border p-2 mb-4 rounded-lg"
+//           />
+
+//           <input
+//             name="roomNumber"
+//             value={form.roomNumber}
+//             onChange={handleChange}
+//             placeholder="Room Number"
+//             className="w-full border p-2 mb-4 rounded-lg"
+//           />
+
+//           <input
+//             name="profilePicture"
+//             value={form.profilePicture}
+//             onChange={handleChange}
+//             placeholder="Profile Picture URL"
+//             className="w-full border p-2 mb-4 rounded-lg"
+//           />
+
+//           <div className="mb-4">
+//             <h4 className="font-semibold mb-2">Subjects</h4>
+
+//             {subjects.map((sub, index) => (
+//               <div key={index} className="flex items-center mb-2">
+//                 <span className="flex-1">{sub}</span>
+//                 <button
+//                   onClick={() => handleRemoveSubject(index)}
+//                   className="text-red-600"
+//                 >
+//                   Remove
+//                 </button>
+//               </div>
+//             ))}
+
+//             <div className="flex mt-3">
+//               <input
+//                 value={newSubject}
+//                 onChange={(e) => setNewSubject(e.target.value)}
+//                 placeholder="New Subject"
+//                 className="flex-1 border p-2 rounded-l-lg"
+//               />
+//               <button
+//                 onClick={handleAddSubject}
+//                 className="bg-green-600 text-white px-4 rounded-r-lg"
+//               >
+//                 Add
+//               </button>
+//             </div>
+//           </div>
+
+//           <div className="flex gap-4 mt-6">
+//             <button
+//               onClick={handleSave}
+//               className="bg-blue-600 text-white px-6 py-2 rounded-xl"
+//             >
+//               Save
+//             </button>
+//             <button
+//               onClick={handleCancel}
+//               className="bg-gray-400 text-white px-6 py-2 rounded-xl"
+//             >
+//               Cancel
+//             </button>
+//           </div>
+//         </div>
+//       )}
+//     </div>
+//   );
+// }
 "use client";
 
-import { useState, useEffect, use } from "react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import {
-  Mail,
-  Phone,
-  MapPin,
-  BookOpen,
-  ArrowLeft,
-  Edit2,
-  Save,
-  X,
-  Plus,
-  Loader2,
-} from "lucide-react";
-import { Teacher } from "@/src/types";
-import { updateTeacherAction } from "../../actions";
+import { useEffect, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
 
-export default function TeacherProfilePage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
+type Teacher = {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  roomNumber: string;
+  profilePicture?: string;
+  subjects: string[];
+};
+
+export default function TeacherDetailPage() {
+  const { id } = useParams();
   const router = useRouter();
-  const resolvedParams = use(params);
-  const teacherId = resolvedParams.id;
 
   const [teacher, setTeacher] = useState<Teacher | null>(null);
-  const [isEditing, setIsEditing] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isEditing, setIsEditing] = useState(false);
 
-  // For Editing state
   const [subjects, setSubjects] = useState<string[]>([]);
-  const [subjectInput, setSubjectInput] = useState("");
+  const [newSubject, setNewSubject] = useState("");
 
+  const [form, setForm] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    roomNumber: "",
+    profilePicture: "",
+  });
+
+  // Fetch teacher
   useEffect(() => {
-    async function fetchTeacher() {
+    const fetchTeacher = async () => {
       try {
-        const response = await fetch("/api/teachers");
-        const data: Teacher[] = await response.json();
-        const t = data.find((item) => item.id === teacherId);
+        const res = await fetch("/api/teachers");
+        const data = await res.json();
+        const t = data.find((teacher: Teacher) => teacher.id === id);
+
         if (t) {
           setTeacher(t);
           setSubjects(t.subjects);
-        } else {
-          router.replace("/");
+
+          setForm({
+            firstName: t.firstName,
+            lastName: t.lastName,
+            email: t.email,
+            phone: t.phone,
+            roomNumber: t.roomNumber,
+            profilePicture: t.profilePicture || "",
+          });
         }
-      } catch (err) {
-        console.error("Failed to fetch teacher:", err);
+      } catch (error) {
+        console.error(error);
       } finally {
         setLoading(false);
       }
-    }
+    };
+
     fetchTeacher();
-  }, [teacherId, router]);
+  }, [id]);
 
-  const addSubject = () => {
-    if (subjectInput.trim()) {
-      if (subjects.length >= 5) {
-        setError("Maximum 5 subjects allowed.");
-        return;
-      }
-      if (subjects.includes(subjectInput.trim())) {
-        setError("Subject already added.");
-        return;
-      }
-      setSubjects([...subjects, subjectInput.trim()]);
-      setSubjectInput("");
-      setError(null);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+
+    setForm((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleAddSubject = () => {
+    if (!newSubject.trim()) return;
+    if (subjects.length >= 5) {
+      alert("Maximum 5 subjects allowed");
+      return;
     }
+
+    setSubjects([...subjects, newSubject.trim()]);
+    setNewSubject("");
   };
 
-  const removeSubject = (index: number) => {
-    setSubjects(subjects.filter((_, i) => i !== index));
+  const handleRemoveSubject = (index: number) => {
+    const updated = subjects.filter((_, i) => i !== index);
+    setSubjects(updated);
   };
 
-  const handleSave = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setError(null);
+  const handleSave = async () => {
+    if (!teacher) return;
 
-    const formData = new FormData(e.currentTarget);
-    formData.set("subjects", subjects.join(","));
+    const formData = new FormData();
+    formData.append("firstName", form.firstName);
+    formData.append("lastName", form.lastName);
+    formData.append("email", form.email);
+    formData.append("phone", form.phone);
+    formData.append("roomNumber", form.roomNumber);
+    formData.append("profilePicture", form.profilePicture);
+    formData.append("subjects", subjects.join(","));
 
-    try {
-      await updateTeacherAction(teacherId, formData);
-      const response = await fetch("/api/teachers");
-      const data: Teacher[] = await response.json();
-      const updated = data.find((item) => item.id === teacherId);
-      if (updated) setTeacher(updated);
-      setIsEditing(false);
-    } catch (err: any) {
-      setError(err.message || "Failed to update teacher.");
-    } finally {
-      setIsSubmitting(false);
-    }
+    await fetch(`/api/teachers/${teacher.id}`, {
+      method: "PUT",
+      body: formData,
+    });
+
+    setTeacher({
+      ...teacher,
+      ...form,
+      subjects,
+    });
+
+    setIsEditing(false);
   };
 
-  if (loading)
-    return (
-      <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
-        <Loader2 className="w-10 h-10 text-indigo-600 animate-spin" />
-        <span className="text-slate-500 font-bold uppercase tracking-widest text-xs">
-          Loading Profile...
-        </span>
-      </div>
-    );
+  const handleCancel = () => {
+    if (!teacher) return;
 
-  if (!teacher) return null;
+    setForm({
+      firstName: teacher.firstName,
+      lastName: teacher.lastName,
+      email: teacher.email,
+      phone: teacher.phone,
+      roomNumber: teacher.roomNumber,
+      profilePicture: teacher.profilePicture || "",
+    });
+
+    setSubjects(teacher.subjects);
+    setIsEditing(false);
+  };
+
+  if (loading) return <p className="p-6 text-white">Loading...</p>;
+  if (!teacher) return <p className="p-6 text-white">Teacher not found</p>;
 
   return (
-    <div className="max-w-4xl mx-auto space-y-8 animate-in fade-in slide-in-from-bottom-4 duration-700 pb-20">
-      <div className="flex justify-between items-center">
-        <Link
-          href="/"
-          className="inline-flex items-center gap-2 text-slate-500 hover:text-indigo-600 transition-colors font-medium group"
-        >
-          <ArrowLeft
-            size={20}
-            className="group-hover:-translate-x-1 transition-transform"
-          />
-          <span>Back to Directory</span>
-        </Link>
-        {!isEditing && (
-          <button
-            onClick={() => setIsEditing(true)}
-            className="bg-indigo-600 text-white px-5 py-2.5 rounded-xl flex items-center gap-2 hover:bg-indigo-700 transition-all font-bold shadow-lg shadow-indigo-100 active:scale-95"
-          >
-            <Edit2 size={18} />
-            <span>Edit Information</span>
-          </button>
-        )}
-      </div>
-
-      <div className="bg-white rounded-3xl shadow-xl overflow-hidden border border-slate-100">
-        <div
-          className={`h-40 transition-all duration-700 ${isEditing ? "bg-slate-800" : "bg-indigo-600"} relative`}
-        >
-          {isEditing && (
-            <div className="absolute inset-0 flex items-center justify-center bg-black/5 text-white/50 font-bold tracking-widest uppercase text-xs">
-              Editing Session
-            </div>
-          )}
-        </div>
-
-        <div className="px-8 py-6 relative">
-          <div className="flex justify-between items-center">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-800 flex justify-center items-start py-16 px-4">
+      <div className="w-full max-w-3xl bg-slate-800 rounded-3xl shadow-2xl p-10 relative text-white">
+        {/* Profile Image */}
+        {teacher.profilePicture && (
+          <div className="absolute -top-16 left-10">
             <div className="w-32 h-32 bg-white rounded-3xl p-1.5 shadow-2xl">
-              <div className="w-full h-full bg-slate-100 rounded-2xl overflow-hidden">
-                {teacher.profilePicture ? (
-                  <img
-                    src={teacher.profilePicture}
-                    alt={`${teacher.firstName} ${teacher.lastName}`}
-                    className="w-full h-full object-cover"
-                  />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center text-slate-400 text-3xl font-bold bg-slate-100 uppercase">
-                    {teacher.firstName[0]}
-                    {teacher.lastName[0]}
-                  </div>
-                )}
-              </div>
+              <img
+                src={teacher.profilePicture}
+                alt={teacher.firstName}
+                className="w-full h-full rounded-2xl object-cover"
+              />
             </div>
           </div>
+        )}
 
-          {isEditing ? (
-            <form onSubmit={handleSave} className="mt-20 space-y-8">
-              {error && (
-                <div className="bg-red-50 border border-red-100 text-red-600 px-4 py-3 rounded-xl text-sm font-semibold flex items-center gap-2">
-                  <X size={18} />
-                  <span>{error}</span>
-                </div>
-              )}
+        {!isEditing ? (
+          <>
+            <div className="mt-16">
+              <h2 className="text-3xl font-bold mb-2">
+                {teacher.firstName} {teacher.lastName}
+              </h2>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-                    First Name
-                  </label>
-                  <input
-                    name="firstName"
-                    defaultValue={teacher.firstName}
-                    required
-                    className="w-full bg-slate-50 border-none rounded-xl px-4 py-3 focus:ring-2 focus:ring-indigo-500 outline-none font-medium"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-                    Last Name
-                  </label>
-                  <input
-                    name="lastName"
-                    defaultValue={teacher.lastName}
-                    required
-                    className="w-full bg-slate-50 border-none rounded-xl px-4 py-3 focus:ring-2 focus:ring-indigo-500 outline-none font-medium"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-                    Email (Unique)
-                  </label>
-                  <input
-                    name="email"
-                    type="email"
-                    defaultValue={teacher.email}
-                    required
-                    className="w-full bg-slate-50 border-none rounded-xl px-4 py-3 focus:ring-2 focus:ring-indigo-500 outline-none font-medium"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-                    Phone
-                  </label>
-                  <input
-                    name="phone"
-                    defaultValue={teacher.phone}
-                    required
-                    className="w-full bg-slate-50 border-none rounded-xl px-4 py-3 focus:ring-2 focus:ring-indigo-500 outline-none font-medium"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-                    Room Number
-                  </label>
-                  <input
-                    name="roomNumber"
-                    defaultValue={teacher.roomNumber}
-                    required
-                    className="w-full bg-slate-50 border-none rounded-xl px-4 py-3 focus:ring-2 focus:ring-indigo-500 outline-none font-medium"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-                    Profile URL
-                  </label>
-                  <input
-                    name="profilePicture"
-                    defaultValue={teacher.profilePicture}
-                    className="w-full bg-slate-50 border-none rounded-xl px-4 py-3 focus:ring-2 focus:ring-indigo-500 outline-none font-medium"
-                  />
-                </div>
+              <p className="text-slate-300 mb-2">📧 {teacher.email}</p>
+              <p className="text-slate-300 mb-2">📱 {teacher.phone}</p>
+              <p className="text-slate-300 mb-4">
+                🏫 Room {teacher.roomNumber}
+              </p>
+
+              <div className="mb-6">
+                <h4 className="font-semibold mb-3">Subjects</h4>
+                {teacher.subjects.map((sub, index) => (
+                  <span
+                    key={index}
+                    className="inline-block bg-slate-700 px-4 py-2 rounded-full mr-2 mb-2 text-sm"
+                  >
+                    {sub}
+                  </span>
+                ))}
               </div>
 
-              <div className="space-y-4">
-                <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-                  Subjects (Max 5)
-                </label>
-                <div className="flex gap-2">
+              <button
+                onClick={() => setIsEditing(true)}
+                className="bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded-xl"
+              >
+                Edit
+              </button>
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="mt-8 space-y-4">
+              <input
+                name="firstName"
+                value={form.firstName}
+                onChange={handleChange}
+                placeholder="First Name"
+                className="w-full bg-slate-700 p-3 rounded-xl outline-none"
+              />
+
+              <input
+                name="lastName"
+                value={form.lastName}
+                onChange={handleChange}
+                placeholder="Last Name"
+                className="w-full bg-slate-700 p-3 rounded-xl outline-none"
+              />
+
+              <input
+                name="email"
+                value={form.email}
+                onChange={handleChange}
+                placeholder="Email"
+                className="w-full bg-slate-700 p-3 rounded-xl outline-none"
+              />
+
+              <input
+                name="phone"
+                value={form.phone}
+                onChange={handleChange}
+                placeholder="Phone"
+                className="w-full bg-slate-700 p-3 rounded-xl outline-none"
+              />
+
+              <input
+                name="roomNumber"
+                value={form.roomNumber}
+                onChange={handleChange}
+                placeholder="Room Number"
+                className="w-full bg-slate-700 p-3 rounded-xl outline-none"
+              />
+
+              <input
+                name="profilePicture"
+                value={form.profilePicture}
+                onChange={handleChange}
+                placeholder="Profile Image URL"
+                className="w-full bg-slate-700 p-3 rounded-xl outline-none"
+              />
+
+              {/* Subjects */}
+              <div className="pt-4">
+                <h4 className="mb-3 font-semibold">Subjects</h4>
+
+                {subjects.map((sub, index) => (
+                  <div
+                    key={index}
+                    className="flex justify-between items-center bg-slate-700 p-2 rounded-lg mb-2"
+                  >
+                    <span>{sub}</span>
+                    <button
+                      onClick={() => handleRemoveSubject(index)}
+                      className="text-red-400"
+                    >
+                      Remove
+                    </button>
+                  </div>
+                ))}
+
+                <div className="flex mt-3">
                   <input
-                    value={subjectInput}
-                    onChange={(e) => setSubjectInput(e.target.value)}
-                    placeholder="Add subject..."
-                    className="flex-1 bg-slate-50 border-none rounded-xl px-4 py-3 focus:ring-2 focus:ring-indigo-500 outline-none"
+                    value={newSubject}
+                    onChange={(e) => setNewSubject(e.target.value)}
+                    placeholder="New Subject"
+                    className="flex-1 bg-slate-700 p-3 rounded-l-xl outline-none"
                   />
                   <button
-                    type="button"
-                    onClick={addSubject}
-                    className="bg-indigo-100 text-indigo-600 px-4 py-3 rounded-xl hover:bg-indigo-200 transition-colors"
+                    onClick={handleAddSubject}
+                    className="bg-green-600 px-4 rounded-r-xl"
                   >
-                    <Plus size={24} />
+                    Add
                   </button>
-                </div>
-                <div className="flex flex-wrap gap-2">
-                  {subjects.map((s, idx) => (
-                    <div
-                      key={idx}
-                      className="bg-indigo-50 text-indigo-700 px-3 py-1.5 rounded-lg flex items-center gap-2 font-bold text-sm border border-indigo-100"
-                    >
-                      <span>{s}</span>
-                      <button
-                        type="button"
-                        onClick={() => removeSubject(idx)}
-                        className="hover:text-red-500"
-                      >
-                        <X size={14} />
-                      </button>
-                    </div>
-                  ))}
                 </div>
               </div>
 
-              <div className="flex gap-4 pt-8 border-t border-slate-50">
+              <div className="flex gap-4 pt-6">
                 <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="flex-1 bg-indigo-600 text-white py-4 rounded-2xl font-bold flex items-center justify-center gap-2 hover:bg-indigo-700 active:scale-[0.98] transition-all"
+                  onClick={handleSave}
+                  className="bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded-xl"
                 >
-                  {isSubmitting ? (
-                    <Loader2 className="animate-spin" />
-                  ) : (
-                    <Save size={20} />
-                  )}
-                  <span>Save Changes</span>
+                  Save
                 </button>
                 <button
-                  type="button"
-                  onClick={() => setIsEditing(false)}
-                  className="px-8 bg-slate-100 text-slate-600 py-4 rounded-2xl font-bold hover:bg-slate-200 transition-all"
+                  onClick={handleCancel}
+                  className="bg-gray-500 hover:bg-gray-600 px-6 py-2 rounded-xl"
                 >
                   Cancel
                 </button>
               </div>
-            </form>
-          ) : (
-            <>
-              <div className="mt-20">
-                <h1 className="text-4xl font-extrabold text-slate-900 tracking-tight">
-                  {teacher.firstName} {teacher.lastName}
-                </h1>
-                <p className="text-indigo-600 font-bold mt-2 uppercase tracking-widest text-xs">
-                  Full Teacher Profile
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mt-12">
-                <div className="space-y-8">
-                  <div>
-                    <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-6 border-b border-slate-100 pb-2">
-                      Contact & Location
-                    </h3>
-                    <div className="space-y-6">
-                      <div className="flex items-start gap-4">
-                        <div className="w-10 h-10 bg-indigo-50 rounded-xl flex items-center justify-center text-indigo-500 shrink-0">
-                          <Mail size={20} />
-                        </div>
-                        <div>
-                          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-                            Email Address
-                          </p>
-                          <p className="text-slate-900 font-bold mt-0.5">
-                            {teacher.email}
-                          </p>
-                        </div>
-                      </div>
-                      <div className="flex items-start gap-4">
-                        <div className="w-10 h-10 bg-indigo-50 rounded-xl flex items-center justify-center text-indigo-500 shrink-0">
-                          <Phone size={20} />
-                        </div>
-                        <div>
-                          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-                            Phone Number
-                          </p>
-                          <p className="text-slate-900 font-bold mt-0.5">
-                            {teacher.phone}
-                          </p>
-                        </div>
-                      </div>
-                      <div className="flex items-start gap-4">
-                        <div className="w-10 h-10 bg-indigo-50 rounded-xl flex items-center justify-center text-indigo-500 shrink-0">
-                          <MapPin size={20} />
-                        </div>
-                        <div>
-                          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-                            Room / Office
-                          </p>
-                          <p className="text-slate-900 font-bold mt-0.5">
-                            Room {teacher.roomNumber}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div>
-                  <h3 className="text-xs font-bold text-slate-400 uppercase tracking-widest mb-6 border-b border-slate-100 pb-2">
-                    Academic Subjects
-                  </h3>
-                  <div className="bg-slate-50 rounded-3xl p-8 border border-slate-100">
-                    <div className="flex items-center gap-3 mb-6">
-                      <BookOpen size={24} className="text-indigo-500" />
-                      <span className="text-lg font-bold text-slate-900">
-                        Education Areas
-                      </span>
-                    </div>
-                    <div className="flex flex-wrap gap-2">
-                      {teacher.subjects.map((subject) => (
-                        <span
-                          key={subject}
-                          className="bg-white text-indigo-600 border border-indigo-100 px-4 py-2 rounded-xl text-sm font-bold shadow-sm"
-                        >
-                          {subject}
-                        </span>
-                      ))}
-                    </div>
-                    {teacher.subjects.length === 0 && (
-                      <p className="text-slate-400 italic text-sm">
-                        No subjects listed.
-                      </p>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </>
-          )}
-        </div>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
